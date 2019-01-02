@@ -1,45 +1,62 @@
-DROP SCHEMA IF EXISTS `beer-rater`;
+DROP SCHEMA IF EXISTS `books`;
 
-CREATE SCHEMA `beer-rater`;
+CREATE SCHEMA `books`;
 
-use `beer-rater`;
+use `books`;
 
-SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `users`;
 
-DROP TABLE IF EXISTS `beer`;
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `beer` (
+--
+-- Inserting data for table `users`
+--
+
+INSERT INTO `users` 
+VALUES 
+('john','{noop}test123',1),
+('mary','{noop}test123',1),
+('susan','{noop}test123',1);
+
+
+--
+-- Table structure for table `authorities`
+--
+
+DROP TABLE IF EXISTS `authorities`;
+CREATE TABLE `authorities` (
+  `username` varchar(50) NOT NULL,
+  `authority` varchar(50) NOT NULL,
+  UNIQUE KEY `authorities_idx_1` (`username`,`authority`),
+  CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Inserting data for table `authorities`
+--
+
+INSERT INTO `authorities` 
+VALUES 
+('john','ROLE_EMPLOYEE'),
+('mary','ROLE_EMPLOYEE'),
+('mary','ROLE_MANAGER'),
+('susan','ROLE_EMPLOYEE'),
+('susan','ROLE_ADMIN');
+
+
+DROP TABLE IF EXISTS `books`;
+
+CREATE TABLE `books` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `company` varchar(45) DEFAULT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `style` varchar(45) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `review_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_REVIEW_idx` (`review_id`),
-  CONSTRAINT `FK_REVIEW` 
-  FOREIGN KEY (`review_id`) 
-  REFERENCES `review` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `title` varchar(245) DEFAULT NULL,
+  `author` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `review`;
-
-CREATE TABLE `review` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `comment` varchar(256) DEFAULT NULL,
-  `beer_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK__BEER_idx` (`beer_id`),
-  CONSTRAINT `FK_BEER` 
-  FOREIGN KEY (`beer_id`) 
-  REFERENCES `beer` (`id`)
-  ON DELETE NO ACTION ON UPDATE NO ACTION,
-  KEY `FK_USER_idx` (`user_id`),
-  CONSTRAINT `FK_USER` FOREIGN KEY (`user_id`) 
-  REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-
-SET FOREIGN_KEY_CHECKS = 1;
