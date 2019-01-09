@@ -37,6 +37,12 @@ class App extends Component {
         </header>
         <a href="/parent/plain-login">Custom Login</a>
         <a href="/login">Boot Login</a>
+        <form action="/logout" method="post">
+          <input 
+          type="submit"
+          value="Sign Out"
+          />
+        </form>
         <Switch>
           <Route exact path="/parent/forbidden"
             render={(props) => <Home />}>
