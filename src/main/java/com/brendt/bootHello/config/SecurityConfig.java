@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -29,12 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    
+    @Autowired
+	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 //			UserBuilder users = User.withDefaultPasswordEncoder();
 //			auth.inMemoryAuthentication().withUser(users.username("john").password("john").roles("EMPLOYEE"));
-//			auth.jdbcAuthentication().dataSource(dataSource);
+			// auth.jdbcAuthentication().dataSource(dataSource);
 
         auth
         	.userDetailsService(userService)
@@ -59,21 +61,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/**/*.css",
                             "/**/*.js")
                             .permitAll()
-                        .antMatchers("/api/auth/**")
+                        .antMatchers("/api/auth/**", "/login/**")
                             .permitAll()
-                        .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                            .permitAll()
+                        
                         .antMatchers(HttpMethod.GET, "/api/users/**")
-                            .permitAll()
+                            .permitAll()                   
                         .anyRequest()
-                            .authenticated();
+                            .authenticated()
+							.and()
+			
+//						.formLogin()
+//							.loginProcessingUrl("/authenticateTheUser")
+//							.defaultSuccessUrl("/", true)
+//						
+//							.and()
+						.httpBasic()
+							.and()
+						.logout()
+							.logoutSuccessUrl("/");
 	}
-
-//	@Override
-//	public UserDetailsService userDetailsService() {
-//		UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER")
-//				.build();
-//
-//		return new InMemoryUserDetailsManager(user);
-//	}
 }
+

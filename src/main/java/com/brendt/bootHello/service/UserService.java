@@ -27,12 +27,11 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
         // Let people login with username
-        User user = userDao.findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username : " + username)
-        );
+        User user = userDao.findByUsername(username);
+              
 
-    	return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+
+    	return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				mapRolesToAuthorities(user.getRoles()));
 	}
 
