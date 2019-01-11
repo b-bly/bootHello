@@ -1,18 +1,29 @@
 package com.brendt.bootHello.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brendt.bootHello.dao.RoleDao;
 import com.brendt.bootHello.dao.UserDao;
-import com.brendt.bootHello.model.User;
+import com.brendt.bootHello.payload.ApiResponse;
+import com.brendt.bootHello.payload.LoginRequest;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    @Autowired
+    AuthenticationManager authenticationManager;
+    
     @Autowired
     UserDao userDao;
 
@@ -22,13 +33,19 @@ public class AuthController {
 //    @Autowired
 //    PasswordEncoder passwordEncoder;
 
-    
-    // example: receives /users/john
-    @GetMapping("/users/{username}")
-    public void getUserProfile(@PathVariable(value = "username") String username) {
-    	System.out.println("path var: " + username);
-        User user = userDao.findByUsername(username);
-        System.out.println("Auth controller, user: " + user);
-        
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return ResponseEntity.ok(new ApiResponse(true, "Login successful."));
     }
 }

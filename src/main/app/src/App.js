@@ -16,6 +16,8 @@ class App extends Component {
 
   handleLogin = (loginObj) => {
     console.log(loginObj)
+
+    this.props.history.push('/')
   }
 
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
@@ -35,7 +37,7 @@ class App extends Component {
         <header>
           React Hello Boot
         </header>
-        <a href="/parent/plain-login">Custom Login</a>
+        <a href="/client/login">Custom Login</a>
         <a href="/login">Boot Login</a>
         <form action="/logout" method="post">
           <input 
@@ -44,10 +46,10 @@ class App extends Component {
           />
         </form>
         <Switch>
-          <Route exact path="/parent/forbidden"
+          <Route exact path="/client/forbidden"
             render={(props) => <Home />}>
           </Route>
-          <Route path="/parent/plain-login"
+          <Route path="/client/login"
             render={(props) => <Login onLogin={this.handleLogin.bind(this)} {...props} />}></Route>
           {/* <Route path="/signup" component={Signup}></Route> */}
         </Switch>
