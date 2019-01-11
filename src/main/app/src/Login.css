@@ -1,0 +1,28 @@
+.form-group {
+text-align: left;
+}
+
+/* input {
+  flex: 0;
+} */
+
+.login-form {
+  /* display: flex;
+  flex-direction: column; */
+  margin: auto;
+}
+
+.btn-container {
+  text-align: right;
+}
+
+
+
+.card-login {
+  width: 250px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}

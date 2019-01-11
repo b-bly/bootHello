@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import { withRouter, Switch, Route } from 'react-router-dom'
+// Request methods
+import { getCurrentUser } from './util/APIUtils'
+
+// Components
 import Home from './Home'
 import Login from './Login'
+import BootstrapLogin from './BootstrapLogin'
 
 class App extends Component {
   constructor(props) {
@@ -10,9 +15,33 @@ class App extends Component {
     this.state = {
       currentUser: null,
       isAuthenticated: false,
+      isLoading: false,
     }
+    this.loadCurrentUser = this.loadCurrentUser.bind(this);
   }
 
+  loadCurrentUser() {
+    this.setState({
+      isLoading: true
+    });
+    getCurrentUser()
+      .then(response => {
+        console.log(response)
+        this.setState({
+          currentUser: response,
+          isAuthenticated: true,
+          isLoading: false
+        });
+      }).catch(error => {
+        this.setState({
+          isLoading: false
+        });
+      });
+  }
+
+  componentDidMount() {
+    this.loadCurrentUser();
+  }
 
   handleLogin = (loginObj) => {
     console.log(loginObj)
@@ -20,7 +49,7 @@ class App extends Component {
     this.props.history.push('/')
   }
 
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
     // localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -37,14 +66,16 @@ class App extends Component {
         <header>
           React Hello Boot
         </header>
+        <div>Current user: </div>
         <a href="/client/login">Custom Login</a>
         <a href="/login">Boot Login</a>
         <form action="/logout" method="post">
-          <input 
-          type="submit"
-          value="Sign Out"
+          <input
+            type="submit"
+            value="Sign Out"
           />
         </form>
+
         <Switch>
           <Route exact path="/client/forbidden"
             render={(props) => <Home />}>

@@ -16,6 +16,18 @@ const request = (options) => {
   );
 };
 
+// User methods
+
+export function getCurrentUser() {
+
+  return request({
+      url: API_BASE_URL + "/user/me",
+      method: 'GET'
+  });
+}
+
+// Auth methods
+
 export function login(loginRequest) {
   return request({
     url: API_BASE_URL + "/auth/signin",

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { login } from './util/APIUtils';
+import './Login.css'
+
+import { Button, Card, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+
 
 const formStyle = {
   display: 'flex',
@@ -45,19 +49,27 @@ class Login extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} style={formStyle}>
-        <label>
-          Username:
-          <input type="text" value={this.state.username} onChange={this.handleChange} name="username" />
-        </label>
-        <label>
-          Password:
-          <input type="password" value={this.state.password} onChange={this.handleChange} name="password" />
-        </label>
-        <div>
-          <input type="submit" value="Submit" />
-        </div>
-      </form>
+      <div className="container">
+        <Card className="card-login">
+          <Form className="login-form" onSubmit={this.handleSubmit}>
+            <FormGroup >
+              <Label>
+                Username:
+          </Label>
+              <Input type="text" value={this.state.username} onChange={this.handleChange} name="username" />
+            </FormGroup>
+            <FormGroup >
+              <Label>
+                Password:
+          </Label>
+              <Input type="password" value={this.state.password} onChange={this.handleChange} name="password" />
+            </FormGroup>
+            <FormGroup>
+              <Input type="submit" className="btn-outline-success" value="Submit" />
+            </FormGroup>
+          </Form>
+        </Card>
+      </div>
     );
   }
 }
