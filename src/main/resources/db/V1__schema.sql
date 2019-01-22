@@ -52,7 +52,7 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (name)
 VALUES 
-('ROLE_EMPLOYEE'),('ROLE_MANAGER'),('ROLE_ADMIN');
+('ROLE_USER'),('ROLE_ADMIN');
 
 --
 -- Table structure for table `users_roles`
@@ -90,3 +90,6 @@ VALUES
 (2, 2),
 (3, 1),
 (3, 3)
+
+-- users registered through REST routes
+-- allen, allen@gmail.com, test123
